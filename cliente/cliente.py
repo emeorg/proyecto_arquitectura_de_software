@@ -5,7 +5,8 @@ def show_menu():
     """Muestra las opciones del menú al usuario."""
     print("\n--- Menú de Cliente del Bus ---")
     print("1. Enviar mensaje a 'servi'")
-    print("2. [Función Futura (no implementada)]")
+    print("2. Ver la lista de productos")
+    print("3. [Función Futura (no implementada)]")
     print("0. Salir")
 
 def prepare_message(service_name, payload_str):
@@ -99,6 +100,9 @@ def main():
                 call_service(sock, "servi", newMessage)
 
             elif choice == '2':
+                call_service(sock, "serdb", "LISTAR_PRODUCTOS")
+
+            elif choice == '3':
                 print("\n[Función aún no implementada]")
 
             elif choice == '0':

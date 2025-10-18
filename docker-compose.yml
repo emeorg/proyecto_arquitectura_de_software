@@ -31,6 +31,49 @@ services:
       - red
     restart: unless-stopped
 
+  db:
+    image: postgres:15-alpine
+    container_name: db
+    depends_on:
+      soabus:
+        condition: service_started
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: soabusdb
+    networks:
+      - red
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  servidor_db:
+    build: ./servidor_db
+    container_name: servidor_db
+    depends_on:
+      db:
+        condition: service_healthy
+      soabus:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_NAME: soabusdb
+      DB_USER: admin
+      DB_PASS: admin
+    networks:
+      - red
+    restart: unless-stopped
+
 networks:
   red:
     driver: bridge
+
+volumes:
+  db_data:
