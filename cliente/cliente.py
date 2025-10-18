@@ -9,6 +9,13 @@ def show_menu():
     print("3. [Función Futura (no implementada)]")
     print("0. Salir")
 
+def show_menu_lista():
+    """Muestra las opciones del submenú de las listas."""
+    print("\n--- Tipos de Lista ---")
+    print("1. Ver todos los productos")
+    print("2. Ver  todos los clientes")
+    print("0. Volver al menú principal")
+
 def prepare_message(service_name, payload_str):
     """Prepara el mensaje para enviar al bus.
 
@@ -100,7 +107,17 @@ def main():
                 call_service(sock, "servi", newMessage)
 
             elif choice == '2':
-                call_service(sock, "serdb", "LISTAR_PRODUCTOS")
+                show_menu_lista()
+                choice_lista = input("Seleccione una opción de lista: ")
+
+                if choice_lista == '1':
+                    call_service(sock, "lista", "LISTA_PRODUCTOS")
+
+                elif choice_lista == '2':
+                    call_service(sock, "lista", "LISTA_CLIENTES")
+
+                elif choice_lista == '0':
+                    continue
 
             elif choice == '3':
                 print("\n[Función aún no implementada]")

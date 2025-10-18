@@ -24,6 +24,16 @@ services:
       - red
     restart: unless-stopped
 
+  servidor_lista:
+    build: ./servidor_lista
+    container_name: servidor_lista
+    depends_on:
+      soabus:
+        condition: service_healthy
+    networks:
+      - red
+    restart: unless-stopped
+
   cliente:
     build: ./cliente
     container_name: cliente
