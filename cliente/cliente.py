@@ -1,12 +1,16 @@
 import socket
 import sys
 
+SERVIDOR_NAME = "servi"
+SERVIDOR_LISTA_NAME = "lista"
+SERVIDOR_BUSQUEDA_PRODUCTO_NAME = "buspr"
+
 def show_menu():
     """Muestra las opciones del menú al usuario."""
     print("\n--- Menú de Cliente del Bus ---")
     print("1. Enviar mensaje a 'servi'")
-    print("2. Ver la lista de productos")
-    print("3. [Función Futura (no implementada)]")
+    print("2. Ver lista disponibles")
+    print("3. Buscar producto")
     print("0. Salir")
 
 def show_menu_lista():
@@ -14,6 +18,12 @@ def show_menu_lista():
     print("\n--- Tipos de Lista ---")
     print("1. Ver todos los productos")
     print("2. Ver  todos los clientes")
+    print("0. Volver al menú principal")
+
+def show_menu_busqueda():
+    """Muestra las opciones del submenú de búsqueda."""
+    print("\n--- Búsqueda de Productos ---")
+    print("1. Buscar por nombre")
     print("0. Volver al menú principal")
 
 def prepare_message(service_name, payload_str):
@@ -114,24 +124,32 @@ def main():
             choice = input("Seleccione una opción: ")
 
             if choice == '1':
-                newMessage = input("Ingrese el mensaje a enviar a 'servi': ")
-                call_service(sock, "servi", newMessage)
+                newMessage = input(f"Ingrese el mensaje a enviar a '{SERVIDOR_NAME}': ")
+                call_service(sock, SERVIDOR_NAME, newMessage)
 
             elif choice == '2':
                 show_menu_lista()
                 choice_lista = input("Seleccione una opción de lista: ")
 
                 if choice_lista == '1':
-                    call_service(sock, "lista", "LISTA_PRODUCTOS")
+                    call_service(sock, SERVIDOR_LISTA_NAME, "LISTA_PRODUCTOS")
 
                 elif choice_lista == '2':
-                    call_service(sock, "lista", "LISTA_CLIENTES")
+                    call_service(sock, SERVIDOR_LISTA_NAME, "LISTA_CLIENTES")
 
                 elif choice_lista == '0':
                     continue
 
             elif choice == '3':
-                print("\n[Función aún no implementada]")
+                show_menu_busqueda()
+                choice_busqueda = input("Seleccione una opción de búsqueda: ")
+
+                if choice_busqueda == '1':
+                    nombre_producto = input("Ingrese el nombre o parte del nombre del producto a buscar: ")
+                    call_service(sock, SERVIDOR_BUSQUEDA_PRODUCTO_NAME, f"BUSQUEDA_PRODUCTO_{nombre_producto}")
+
+                elif choice_busqueda == '0':
+                    continue                
 
             elif choice == '0':
                 print("Cerrando conexión... Adiós.")
