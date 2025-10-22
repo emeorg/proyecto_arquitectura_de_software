@@ -71,10 +71,10 @@ try:
     print(f"Conectando al bus en {BUS_ADDRESS}...")
     sock.connect(BUS_ADDRESS)
 
-    message = b'00010sinitlista'
+    message = b'00010sinit' + MY_SERVICE_NAME.encode('utf-8')
     sock.sendall(message)
     sinit = 1
-    print("Servicio 'lista' registrado, esperando confirmación...")
+    print(f"Servicio '{MY_SERVICE_NAME}' registrado, esperando confirmación...")
 
     while True:
         print("\nWaiting for transaction from a client...")
