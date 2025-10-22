@@ -4,8 +4,6 @@ import psycopg2
 import time
 import os
 
-# --- (La configuración de la DB y la función connect_to_db no cambian) ---
-
 DB_HOST = os.environ.get('DB_HOST', 'db')
 DB_NAME = os.environ.get('DB_NAME', 'soabusdb')
 DB_USER = os.environ.get('DB_USER', 'admin')
@@ -50,22 +48,31 @@ def run_query(conn, query_str):
         with conn.cursor() as cur:
             cur.execute(query_str)
             
-            if query_str.strip().upper().startswith("SELECT"):
+            if cur.description:
                 rows = cur.fetchall()
+                
                 if not rows:
-                    result_str = "Consulta OK. No se encontraron filas."
+                    result_str = "OK_No se encontraron resultados"
                 else:
-                    result_str = ", ".join([str(row) for row in rows])
+                    csv_rows = []
+                    for row in rows:
+                        str_row = [str(item).strip() for item in row] 
+                        csv_rows.append(",".join(str_row))
+                        
+                    result_str = "OK_" + "\n".join(csv_rows)
+
             else:
                 conn.commit()
-                result_str = f"Comando OK. {cur.rowcount} filas afectadas."
+                status_message = cur.statusmessage
+                result_str = f"OK_{status_message}"
 
-        return result_str
-
-    except Exception as e:
-        conn.rollback() 
-        print(f"Error al ejecutar consulta: {e}")
-        return f"Error de consulta: {e}"
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error ejecutando consulta: {error}")
+        result_str = f"Error: {error}"
+        if conn:
+            conn.rollback() # Revertir cambios si algo falló
+            
+    return result_str
 
 def send_response(sock, payload_str):
     """Codifica y envía una respuesta al bus.
@@ -102,21 +109,22 @@ try:
         amount_received = 0        
         amount_expected_bytes = sock.recv(5)
         if not amount_expected_bytes:
-            print("El bus cerró la conexión (recv 5).")
             break
 
         amount_expected = int(amount_expected_bytes.decode('utf-8'))
+        
+        data = b''
+        while amount_received < amount_expected:
+            chunk = sock.recv(amount_expected - amount_received) 
+            if not chunk:
+                break
 
-        while amount_received < amount_expected: 
-            data = sock.recv(amount_expected - amount_received)
-            amount_received += len(data)
+            data += chunk
+            amount_received += len(chunk)
 
         if not data:
             break
-
-        print("Processing command...")
-        print('received {!r}'.format(data))
-
+        
         data_str = data.decode('utf-8')
 
         if (sinit == 1):

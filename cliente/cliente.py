@@ -63,19 +63,33 @@ def call_service(sock, service_name, payload_str):
 
         print("... Esperando respuesta del bus ...")
         amount_received = 0
-        amount_expected = int(sock.recv(5))
+        
+        amount_expected_bytes = sock.recv(5)
+        if not amount_expected_bytes:
+            return
+            
+        amount_expected = int(amount_expected_bytes.decode('utf-8'))
 
         data = b''
         while amount_received < amount_expected:
-            chunk = sock.recv(amount_expected - amount_received)
+            chunk = sock.recv(amount_expected - amount_received) 
             if not chunk:
-                print("Error: Conexión cerrada por el servidor.")
                 return
             data += chunk
             amount_received += len(chunk)
 
         print("[Respuesta recibida]")
-        print(f"Datos: {data!r} ({data.decode('utf-8')})")
+        
+        full_response_str = data.decode('utf-8')
+
+        try:
+            left, sep, right = full_response_str.rpartition('_')
+            if sep:
+                print(f"\n{right}")
+            else:
+                print(f"\n{full_response_str}")
+        except ValueError:
+            print(f"\n{full_response_str}")
 
     except socket.error as e:
         print(f"Error de socket: {e}")
@@ -83,7 +97,6 @@ def call_service(sock, service_name, payload_str):
         print(f"Ocurrió un error inesperado: {e}")
 
 def main():
-    # 1. Conectarse al bus
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         bus_address = ('soabus', 5000)
@@ -95,8 +108,6 @@ def main():
         print("Asegúrate de que 'soabus' esté corriendo.")
         sys.exit(1)
 
-
-    # 2. Menú
     try:
         while True:
             show_menu()

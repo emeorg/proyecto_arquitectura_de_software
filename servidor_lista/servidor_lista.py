@@ -28,18 +28,15 @@ def call_db_service(sql_query):
     print(f"Llamando al servicio de DB con consulta: {sql_query}")
     db_sock = None
     try:
-        # 1. Preparar el mensaje para servidor_db
         payload = DB_SERVICE_NAME + sql_query
         payload_bytes = payload.encode('utf-8')
         length_str = str(len(payload_bytes)).zfill(5).encode('utf-8')
         message = length_str + payload_bytes
 
-        # 2. Conectar, enviar y recibir
         db_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         db_sock.connect(BUS_ADDRESS)
         db_sock.sendall(message)
 
-        # 3. Recibir la respuesta de servidor_db
         amount_received = 0
         amount_expected_bytes = db_sock.recv(5)
         if not amount_expected_bytes:
@@ -47,11 +44,14 @@ def call_db_service(sql_query):
 
         amount_expected = int(amount_expected_bytes.decode('utf-8'))
 
+        data = b''
         while amount_received < amount_expected:
-            data = db_sock.recv(amount_expected - amount_received)
-            amount_received += len(data)
+            chunk = db_sock.recv(amount_expected - amount_received)
+            if not chunk:
+                break
+            data += chunk
+            amount_received += len(chunk)
 
-        # 4. Decodificar y limpiar la respuesta
         full_response_str = data.decode('utf-8')
 
         data_part = full_response_str.split("_", 1)[-1]
@@ -66,38 +66,34 @@ def call_db_service(sql_query):
             db_sock.close()
 
 
-# --- Programa Principal ---
-server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 try:
     print(f"Conectando al bus en {BUS_ADDRESS}...")
-    server_sock.connect(BUS_ADDRESS)
+    sock.connect(BUS_ADDRESS)
 
-    # 1. Registrar este servicio
     message = b'00010sinitlista'
-    server_sock.sendall(message)
+    sock.sendall(message)
     sinit = 1
     print("Servicio 'lista' registrado, esperando confirmación...")
 
-    # 2. Bucle principal de escucha (como Servidor)
     while True:
         print("\nWaiting for transaction from a client...")
         amount_received = 0
 
-        amount_expected_bytes = server_sock.recv(5)
+        amount_expected_bytes = sock.recv(5)
         if not amount_expected_bytes:
-            print("El bus cerró la conexión (recv 5).")
             break
-
         amount_expected = int(amount_expected_bytes.decode('utf-8'))
-
+        
+        data = b''
         while amount_received < amount_expected:
-            data = server_sock.recv(amount_expected - amount_received)
-            amount_received += len(data)
+            chunk = sock.recv(amount_expected - amount_received) 
+            if not chunk:
+                break
 
-        if not data:
-            break
+            data += chunk
+            amount_received += len(chunk)
 
-        print(f"Processing command... received: {data!r}")
         data_str = data.decode('utf-8')
 
         if (sinit == 1):
@@ -108,25 +104,30 @@ try:
                 command = data_str[len(MY_SERVICE_NAME):].strip()
                 
                 if command == 'LISTA_PRODUCTOS':
-                    print("Comando 'LISTA_PRODUCTOS' recibido.")
-                    sql_query = "SELECT nombre FROM productos;"
+                    sql_query = """
+                        SELECT
+                            j.Titulo AS NombreJuego,
+                            p.PrecioVenta,
+                            p.Stock
+                        FROM Productos AS p
+                        JOIN Juegos AS j ON p.JuegoID = j.JuegoID;
+                    """
                     db_result = call_db_service(sql_query)
-                    send_response(server_sock, db_result)
+                    send_response(sock, db_result)
 
                 elif command == 'LISTA_CLIENTES':
-                    print("Comando 'LISTA_CLIENTES' recibido.")
                     sql_query = "SELECT nombre FROM clientes;"
                     db_result = call_db_service(sql_query)
-                    send_response(server_sock, db_result)
+                    send_response(sock, db_result)
                     
                 else:
                     print(f"Comando desconocido: {command}")
-                    send_response(server_sock, "Error: Comando no reconocido")
+                    send_response(sock, "Error: Comando no reconocido")
             
             except Exception as e:
                 print(f"Error procesando el comando: {e}")
-                send_response(server_sock, f"Error: {e}")
+                send_response(sock, f"Error: {e}")
 
 finally:
     print("Cerrando conexión con el bus.")
-    server_sock.close()
+    sock.close()
