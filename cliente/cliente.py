@@ -3,7 +3,7 @@ import sys
 
 SERVIDOR_NAME = "servi"
 SERVIDOR_LISTA_NAME = "lista"
-SERVIDOR_BUSQUEDA_PRODUCTO_NAME = "buspr"
+SERVIDOR_BUSQUEDA_NAME = "buspr"
 
 def show_menu():
     """Muestra las opciones del menú al usuario."""
@@ -24,6 +24,7 @@ def show_menu_busqueda():
     """Muestra las opciones del submenú de búsqueda."""
     print("\n--- Búsqueda de Productos ---")
     print("1. Buscar por nombre")
+    print("2. Buscar por consola")
     print("0. Volver al menú principal")
 
 def prepare_message(service_name, payload_str):
@@ -146,7 +147,11 @@ def main():
 
                 if choice_busqueda == '1':
                     nombre_producto = input("Ingrese el nombre o parte del nombre del producto a buscar: ")
-                    call_service(sock, SERVIDOR_BUSQUEDA_PRODUCTO_NAME, f"BUSQUEDA_PRODUCTO_{nombre_producto}")
+                    call_service(sock, SERVIDOR_BUSQUEDA_NAME, f"BUSQUEDA_PRODUCTO_{nombre_producto}")
+
+                elif choice_busqueda == '2':
+                    nombre_consola = input("Ingrese el nombre o parte del nombre de la consola a buscar: ")
+                    call_service(sock, SERVIDOR_BUSQUEDA_NAME, f"BUSQUEDA_CONSOLA_{nombre_consola}")
 
                 elif choice_busqueda == '0':
                     continue                

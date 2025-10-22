@@ -103,11 +103,12 @@ try:
             try:
                 command = data_str[len(MY_SERVICE_NAME):].strip()
 
-                COMMAND_PREFIX = 'BUSQUEDA_PRODUCTO_'
+                COMMAND_PREFIX_BUSQUEDA_PRODUCTO = 'BUSQUEDA_PRODUCTO_'
+                COMMAND_PREFIX_BUSQUEDA_CONSOLA = 'BUSQUEDA_CONSOLA_'
                 
-                if command.startswith(COMMAND_PREFIX):
+                if command.startswith(COMMAND_PREFIX_BUSQUEDA_PRODUCTO):
                     
-                    search_term = command[len(COMMAND_PREFIX):].strip()
+                    search_term = command[len(COMMAND_PREFIX_BUSQUEDA_PRODUCTO):].strip()
                     
                     print(f"Comando 'BUSQUEDA_PRODUCTO' recibido. Término: '{search_term}'")
 
@@ -119,6 +120,25 @@ try:
                         JOIN Juegos AS j ON p.JuegoID = j.JuegoID 
                         JOIN Consolas AS c ON p.ConsolaID = c.ConsolaID 
                         WHERE j.Titulo ILIKE '%{safe_search_term}%';
+                    """
+
+                    db_result = call_db_service(sql_query)
+                    send_response(sock, db_result)
+
+                elif command.startswith(COMMAND_PREFIX_BUSQUEDA_CONSOLA):
+                    
+                    console_name = command[len(COMMAND_PREFIX_BUSQUEDA_CONSOLA):].strip()
+                    
+                    print(f"Comando 'BUSQUEDA_CONSOLA' recibido. Consola: '{console_name}'")
+
+                    safe_console_name = console_name.replace("'", "''")
+
+                    sql_query = f"""
+                        SELECT j.Titulo, c.Nombre, p.Formato, p.Condicion, p.PrecioVenta, p.Stock 
+                        FROM Productos AS p 
+                        JOIN Juegos AS j ON p.JuegoID = j.JuegoID 
+                        JOIN Consolas AS c ON p.ConsolaID = c.ConsolaID 
+                        WHERE c.Nombre ILIKE '%{safe_console_name}%';
                     """
 
                     db_result = call_db_service(sql_query)
