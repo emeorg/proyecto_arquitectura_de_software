@@ -106,6 +106,7 @@ try:
                 if command == 'LISTA_PRODUCTOS':
                     sql_query = """
                         SELECT
+                            p.ProductoID,
                             j.Titulo AS NombreJuego,
                             p.PrecioVenta,
                             p.Stock
