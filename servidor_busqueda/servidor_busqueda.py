@@ -115,7 +115,7 @@ try:
                     safe_search_term = search_term.replace("'", "''")
 
                     sql_query = f"""
-                        SELECT j.Titulo, c.Nombre, p.Formato, p.Condicion, p.PrecioVenta, p.Stock 
+                        SELECT  p.ProductoID, j.Titulo, c.Nombre, p.Formato, p.Condicion, p.PrecioVenta, p.Stock 
                         FROM Productos AS p 
                         JOIN Juegos AS j ON p.JuegoID = j.JuegoID 
                         JOIN Consolas AS c ON p.ConsolaID = c.ConsolaID 
@@ -134,7 +134,7 @@ try:
                     safe_console_name = console_name.replace("'", "''")
 
                     sql_query = f"""
-                        SELECT j.Titulo, c.Nombre, p.Formato, p.Condicion, p.PrecioVenta, p.Stock 
+                        SELECT  p.ProductoID, j.Titulo, c.Nombre, p.Formato, p.Condicion, p.PrecioVenta, p.Stock 
                         FROM Productos AS p 
                         JOIN Juegos AS j ON p.JuegoID = j.JuegoID 
                         JOIN Consolas AS c ON p.ConsolaID = c.ConsolaID 
