@@ -402,3 +402,9 @@ INSERT INTO Productos (JuegoID, ConsolaID, Formato, Condicion, PrecioVenta, Stoc
 (51, 15, 'Digital', 'Nuevo', 54990, 999, 'NSW-ACNH-D-NVO', 37000),
 (54, 15, 'Digital', 'Nuevo', 45000, 999, 'NSW-MDREAD-D-NVO', 29000),
 (55, 15, 'Digital', 'Nuevo', 49990, 999, 'NSW-MPSS-D-NVO', 34000);
+
+INSERT INTO Clientes (Nombre, Apellido, Email, Telefono, FechaRegistro) VALUES
+('Michelle', 'Ramírez', 'michelle.ramirez@mail.udp.cl', 900000001, '2024-01-15'),
+('Samuel', 'Vasquez', 'Samuel.vasquez@mail.udp.cl', 900000002, '2024-03-22'),
+('Alex', 'Bravo', 'alex.bravo@mail.udp.cl', 900000003, '2024-06-2'),
+('Diego', 'Escobar', 'diego.escobar@mail.udp.cl', 900000004, '2024-08-10');
