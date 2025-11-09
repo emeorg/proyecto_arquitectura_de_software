@@ -4,6 +4,7 @@ import sys
 SERVIDOR_NAME = "servi"
 SERVIDOR_LISTA_NAME = "lista"
 SERVIDOR_BUSQUEDA_NAME = "buspr"
+SERVIDOR_VENTA_NAME = "venta"
 
 def show_menu():
     """Muestra las opciones del menú al usuario."""
@@ -11,6 +12,7 @@ def show_menu():
     print("1. Enviar mensaje a 'servi'")
     print("2. Ver lista disponibles")
     print("3. Buscar producto")
+    print("4. Ver ventas")
     print("0. Salir")
 
 def show_menu_lista():
@@ -25,6 +27,15 @@ def show_menu_busqueda():
     print("\n--- Búsqueda de Productos ---")
     print("1. Buscar por nombre")
     print("2. Buscar por consola")
+    print("0. Volver al menú principal")
+
+def show_menu_ventas():
+    """Muestra las opciones del submenú de ventas"""
+    print("\n--- Ver ventas ---")
+    print("1. Ventas de este mes")
+    print("2. Ventas del ultimo mes")
+    print("3. Ventas de un mes en especifico")
+    print("4. Ventas por un rango de tiempo")
     print("0. Volver al menú principal")
 
 def prepare_message(service_name, payload_str):
@@ -155,6 +166,29 @@ def main():
 
                 elif choice_busqueda == '0':
                     continue                
+
+            elif choice == '4':
+                show_menu_ventas()
+                choice_busqueda = input("Seleccione una opción: ")
+
+                if choice_busqueda == '1':
+                    call_service(sock, SERVIDOR_VENTA_NAME, "VENTAS_MES_ACTUAL")
+
+                elif choice_busqueda == '2':
+                    call_service(sock, SERVIDOR_VENTA_NAME, "VENTAS_MES_ULTIMO")
+
+                elif choice_busqueda == '3':
+                    mes_seleccionado = input("Ingrese la fecha del mes con el siguiente formato MM-AAAA: ")
+                    call_service(sock, SERVIDOR_VENTA_NAME, f"VENTAS_MES_ESPECIFICO_{mes_seleccionado}")
+                
+                elif choice_busqueda == '4':
+                    rango_inicio = input("Ingrese el inicio del rango con el siguiente formato MM-AAAA: ")
+                    rango_fin = input("Ingrese el final del rango con el siguiente formato MM-AAAA: ")
+
+                    call_service(sock, SERVIDOR_VENTA_NAME, f"VENTAS_MES_RANGO_{rango_inicio}_&_{rango_fin}")
+                
+                elif choice_busqueda == '0':
+                    continue
 
             elif choice == '0':
                 print("Cerrando conexión... Adiós.")

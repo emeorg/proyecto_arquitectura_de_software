@@ -44,6 +44,16 @@ services:
       - red
     restart: unless-stopped
 
+  servidor_ventas:
+    build: ./servidor_ventas
+    container_name: servidor_ventas
+    depends_on:
+      soabus:
+        condition: service_healthy
+    networks:
+      - red
+    restart: unless-stopped
+
   cliente:
     build: ./cliente
     container_name: cliente
