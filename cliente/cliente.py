@@ -1,55 +1,82 @@
 import socket
 import sys
+from rich.console import Console
+from rich.panel import Panel
+from rich.prompt import Prompt, Confirm
+from rich.table import Table
+from rich import box
+from rich.text import Text
+
+console = Console()
 
 SERVIDOR_NAME = "servi"
 SERVIDOR_LISTA_NAME = "lista"
 SERVIDOR_BUSQUEDA_NAME = "buspr"
 SERVIDOR_VENTA_NAME = "venta"
 
+def show_header():
+    """Muestra el encabezado principal de la aplicación."""
+    header = Text("SISTEMA DE GESTION DE VENTAS", style="bold cyan", justify="center")
+    console.print(Panel(header, box=box.DOUBLE, border_style="cyan"))
+
 def show_menu():
-    """Muestra las opciones del menú al usuario."""
-    print("\n--- Menú de Cliente del Bus ---")
-    print("1. Enviar mensaje a 'servi'")
-    print("2. Ver lista disponibles")
-    print("3. Buscar producto")
-    print("4. Ver ventas")
-    print("0. Salir")
+    """Muestra el menú principal con estilo moderno."""
+    table = Table(show_header=False, box=box.ROUNDED, border_style="blue", padding=(0, 2))
+    table.add_column("Opcion", style="cyan bold", width=8)
+    table.add_column("Descripcion", style="white")
+    
+    table.add_row("1", "Enviar mensaje personalizado")
+    table.add_row("2", "Ver listas disponibles")
+    table.add_row("3", "Buscar producto")
+    table.add_row("4", "Ver ventas")
+    table.add_row("0", "Salir")
+    
+    console.print("\n")
+    console.print(table)
 
 def show_menu_lista():
-    """Muestra las opciones del submenú de las listas."""
-    print("\n--- Tipos de Lista ---")
-    print("1. Ver todos los productos")
-    print("2. Ver  todos los clientes")
-    print("0. Volver al menú principal")
+    """Muestra el submenú de listas."""
+    table = Table(title="TIPOS DE LISTA", show_header=False, box=box.ROUNDED, border_style="green")
+    table.add_column("Opcion", style="green bold", width=8)
+    table.add_column("Descripcion", style="white")
+    
+    table.add_row("1", "Ver todos los productos")
+    table.add_row("2", "Ver todos los clientes")
+    table.add_row("0", "Volver al menu principal")
+    
+    console.print("\n")
+    console.print(table)
 
 def show_menu_busqueda():
-    """Muestra las opciones del submenú de búsqueda."""
-    print("\n--- Búsqueda de Productos ---")
-    print("1. Buscar por nombre")
-    print("2. Buscar por consola")
-    print("0. Volver al menú principal")
+    """Muestra el submenú de búsqueda."""
+    table = Table(title="BUSQUEDA DE PRODUCTOS", show_header=False, box=box.ROUNDED, border_style="yellow")
+    table.add_column("Opcion", style="yellow bold", width=8)
+    table.add_column("Descripcion", style="white")
+    
+    table.add_row("1", "Buscar por nombre")
+    table.add_row("2", "Buscar por consola")
+    table.add_row("0", "Volver al menu principal")
+    
+    console.print("\n")
+    console.print(table)
 
 def show_menu_ventas():
-    """Muestra las opciones del submenú de ventas"""
-    print("\n--- Ver ventas ---")
-    print("1. Ventas de este mes")
-    print("2. Ventas del ultimo mes")
-    print("3. Ventas de un mes en especifico")
-    print("4. Ventas por un rango de tiempo")
-    print("0. Volver al menú principal")
+    """Muestra el submenú de ventas."""
+    table = Table(title="VER VENTAS", show_header=False, box=box.ROUNDED, border_style="magenta")
+    table.add_column("Opcion", style="magenta bold", width=8)
+    table.add_column("Descripcion", style="white")
+    
+    table.add_row("1", "Ventas de este mes")
+    table.add_row("2", "Ventas del ultimo mes")
+    table.add_row("3", "Ventas de un mes especifico")
+    table.add_row("4", "Ventas por rango de tiempo")
+    table.add_row("0", "Volver al menu principal")
+    
+    console.print("\n")
+    console.print(table)
 
 def prepare_message(service_name, payload_str):
-    """Prepara el mensaje para enviar al bus.
-
-    Este formato incluye un prefijo de 5 bytes que indica
-    la longitud total del mensaje (nombre del servicio + payload).
-
-    Args:
-        service_name (str): Nombre del servicio destino.
-        payload_str (str): Mensaje a enviar.
-    Returns:
-        bytes: Mensaje completo listo para enviar.
-    """
+    """Prepara el mensaje para enviar al bus."""
     full_payload = service_name + payload_str
     full_payload_bytes = full_payload.encode('utf-8')
     length_str = str(len(full_payload_bytes)).zfill(5)
@@ -57,148 +84,126 @@ def prepare_message(service_name, payload_str):
     return message_to_send
 
 def call_service(sock, service_name, payload_str):
-    """Prepara, envía y recibe un mensaje del bus.
-
-    Esta función implementa un protocolo de cliente simple:
-    1. Envía un mensaje formateado al servicio.
-    2. Espera una respuesta.
-    3. Lee los primeros 5 bytes para saber la longitud del mensaje.
-    4. Lee el resto del mensaje y lo imprime en la consola.
-
-    La función maneja internamente las excepciones de socket
-    imprimiendo el error, pero no las propaga.
-
-    Args:
-        sock (socket.socket): Socket ya conectado al bus.
-        service_name (str): Nombre del servicio destino.
-        payload_str (str): Mensaje (payload) a enviar.
-
-    Returns:
-        None: La función imprime la respuesta recibida directamente
-        en la consola
-    """
+    """Prepara, envía y recibe un mensaje del bus con feedback visual."""
     try:
         message_to_send = prepare_message(service_name, payload_str)
 
-        print(f"\n[Enviando a '{service_name}']: {payload_str}")
+        console.print(f"\n[bold cyan]>[/bold cyan] Enviando a '[yellow]{service_name}[/yellow]': [white]{payload_str}[/white]")
         sock.sendall(message_to_send)
 
-        print("... Esperando respuesta del bus ...")
-        amount_received = 0
-        
-        amount_expected_bytes = sock.recv(5)
-        if not amount_expected_bytes:
-            return
+        with console.status("[bold green]Esperando respuesta del servidor...", spinner="dots"):
+            amount_received = 0
             
-        amount_expected = int(amount_expected_bytes.decode('utf-8'))
-
-        data = b''
-        while amount_received < amount_expected:
-            chunk = sock.recv(amount_expected - amount_received) 
-            if not chunk:
+            amount_expected_bytes = sock.recv(5)
+            if not amount_expected_bytes:
                 return
-            data += chunk
-            amount_received += len(chunk)
+                
+            amount_expected = int(amount_expected_bytes.decode('utf-8'))
 
-        print("[Respuesta recibida]")
+            data = b''
+            while amount_received < amount_expected:
+                chunk = sock.recv(amount_expected - amount_received) 
+                if not chunk:
+                    return
+                data += chunk
+                amount_received += len(chunk)
+
+        console.print("[bold green][OK][/bold green] Respuesta recibida\n")
         
         full_response_str = data.decode('utf-8')
 
         try:
             left, sep, right = full_response_str.rpartition('_')
             if sep:
-                print(f"\n{right}")
+                console.print(Panel(right, title="[bold cyan]Respuesta del Servidor[/bold cyan]", 
+                                  border_style="green", box=box.ROUNDED))
             else:
-                print(f"\n{full_response_str}")
+                console.print(Panel(full_response_str, title="[bold cyan]Respuesta del Servidor[/bold cyan]", 
+                                  border_style="green", box=box.ROUNDED))
         except ValueError:
-            print(f"\n{full_response_str}")
+            console.print(Panel(full_response_str, title="[bold cyan]Respuesta del Servidor[/bold cyan]", 
+                              border_style="green", box=box.ROUNDED))
 
     except socket.error as e:
-        print(f"Error de socket: {e}")
+        console.print(f"[bold red][ERROR][/bold red] Error de socket: {e}")
     except Exception as e:
-        print(f"Ocurrió un error inesperado: {e}")
+        console.print(f"[bold red][ERROR][/bold red] Error inesperado: {e}")
 
 def main():
+    console.clear()
+    show_header()
+    
     try:
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        bus_address = ('soabus', 5000)
-        print(f"Conectando a {bus_address[0]} en el puerto {bus_address[1]}...")
-        sock.connect(bus_address)
-        print("¡Conectado!")
+        with console.status("[bold yellow]Conectando al bus...", spinner="dots"):
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            bus_address = ('soabus', 5000)
+            sock.connect(bus_address)
+        
+        console.print(f"[bold green][OK][/bold green] Conectado a {bus_address[0]}:{bus_address[1]}\n")
     except socket.error as e:
-        print(f"No se pudo conectar al bus: {e}")
-        print("Asegúrate de que 'soabus' esté corriendo.")
+        console.print(f"[bold red][ERROR][/bold red] No se pudo conectar al bus: {e}")
+        console.print("[yellow]Asegurate de que 'soabus' este corriendo.[/yellow]")
         sys.exit(1)
 
     try:
         while True:
             show_menu()
-            choice = input("Seleccione una opción: ")
+            choice = Prompt.ask("\n[bold cyan]Seleccione una opcion[/bold cyan]", 
+                              choices=["0", "1", "2", "3", "4"], 
+                              default="0")
 
             if choice == '1':
-                newMessage = input(f"Ingrese el mensaje a enviar a '{SERVIDOR_NAME}': ")
+                newMessage = Prompt.ask(f"\n[cyan]Ingrese el mensaje a enviar a '{SERVIDOR_NAME}'[/cyan]")
                 call_service(sock, SERVIDOR_NAME, newMessage)
 
             elif choice == '2':
                 show_menu_lista()
-                choice_lista = input("Seleccione una opción de lista: ")
+                choice_lista = Prompt.ask("\n[bold green]Seleccione una opcion[/bold green]", 
+                                        choices=["0", "1", "2"], 
+                                        default="0")
 
                 if choice_lista == '1':
                     call_service(sock, SERVIDOR_LISTA_NAME, "LISTA_PRODUCTOS")
-
                 elif choice_lista == '2':
                     call_service(sock, SERVIDOR_LISTA_NAME, "LISTA_CLIENTES")
 
-                elif choice_lista == '0':
-                    continue
-
             elif choice == '3':
                 show_menu_busqueda()
-                choice_busqueda = input("Seleccione una opción de búsqueda: ")
+                choice_busqueda = Prompt.ask("\n[bold yellow]Seleccione una opcion[/bold yellow]", 
+                                           choices=["0", "1", "2"], 
+                                           default="0")
 
                 if choice_busqueda == '1':
-                    nombre_producto = input("Ingrese el nombre o parte del nombre del producto a buscar: ")
+                    nombre_producto = Prompt.ask("\n[cyan]Ingrese el nombre del producto[/cyan]")
                     call_service(sock, SERVIDOR_BUSQUEDA_NAME, f"BUSQUEDA_PRODUCTO_{nombre_producto}")
-
                 elif choice_busqueda == '2':
-                    nombre_consola = input("Ingrese el nombre o parte del nombre de la consola a buscar: ")
+                    nombre_consola = Prompt.ask("\n[cyan]Ingrese el nombre de la consola[/cyan]")
                     call_service(sock, SERVIDOR_BUSQUEDA_NAME, f"BUSQUEDA_CONSOLA_{nombre_consola}")
-
-                elif choice_busqueda == '0':
-                    continue                
 
             elif choice == '4':
                 show_menu_ventas()
-                choice_busqueda = input("Seleccione una opción: ")
+                choice_venta = Prompt.ask("\n[bold magenta]Seleccione una opcion[/bold magenta]", 
+                                        choices=["0", "1", "2", "3", "4"], 
+                                        default="0")
 
-                if choice_busqueda == '1':
+                if choice_venta == '1':
                     call_service(sock, SERVIDOR_VENTA_NAME, "VENTAS_MES_ACTUAL")
-
-                elif choice_busqueda == '2':
+                elif choice_venta == '2':
                     call_service(sock, SERVIDOR_VENTA_NAME, "VENTAS_MES_ULTIMO")
-
-                elif choice_busqueda == '3':
-                    mes_seleccionado = input("Ingrese la fecha del mes con el siguiente formato MM-AAAA: ")
+                elif choice_venta == '3':
+                    mes_seleccionado = Prompt.ask("\n[cyan]Ingrese la fecha (MM-AAAA)[/cyan]")
                     call_service(sock, SERVIDOR_VENTA_NAME, f"VENTAS_MES_ESPECIFICO_{mes_seleccionado}")
-                
-                elif choice_busqueda == '4':
-                    rango_inicio = input("Ingrese el inicio del rango con el siguiente formato MM-AAAA: ")
-                    rango_fin = input("Ingrese el final del rango con el siguiente formato MM-AAAA: ")
-
+                elif choice_venta == '4':
+                    rango_inicio = Prompt.ask("\n[cyan]Inicio del rango (MM-AAAA)[/cyan]")
+                    rango_fin = Prompt.ask("[cyan]Final del rango (MM-AAAA)[/cyan]")
                     call_service(sock, SERVIDOR_VENTA_NAME, f"VENTAS_MES_RANGO_{rango_inicio}_&_{rango_fin}")
-                
-                elif choice_busqueda == '0':
-                    continue
 
             elif choice == '0':
-                print("Cerrando conexión... Adiós.")
-                break
-
-            else:
-                print(f"\n[Error: '{choice}' no es una opción válida. Intente de nuevo.]")
+                if Confirm.ask("\n[yellow]Esta seguro que desea salir?[/yellow]", default=True):
+                    break
 
     finally:
-        print("Cerrando conexión del cliente.")
+        console.print("[dim]Cerrando conexion del cliente...[/dim]")
         sock.close()
 
 if __name__ == "__main__":
