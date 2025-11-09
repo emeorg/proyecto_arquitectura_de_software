@@ -104,151 +104,151 @@ CREATE TABLE DetalleCompra (
 );
 
 INSERT INTO Generos (Nombre) VALUES
-('Disparos en primera persona'), -- ID: 1
-('Disparos en tercera persona'), -- ID: 2
-('Hack and slash'), -- ID: 3
-('Arcade y ritmo'), -- ID: 4
-('Juegos de plataforma y corredores'), -- ID: 5
-('Matamarcianos'), -- ID: 6
-('Lucha y artes marciales'), -- ID: 7
-('Objetos ocultos'), -- ID: 8
-('Casuales'), -- ID: 9
-('Metroidvania'), -- ID: 10
-('Puzles'), -- ID: 11
-('Rol de aventuras'), -- ID: 12
-('Novelas visuales'), -- ID: 13
-('Buena trama'), -- ID: 14
-('Rol y acción'), -- ID: 15
-('Rol, táctica y estrategia'), -- ID: 16
-('Rol japonés'), -- ID: 17
-('Roguelikes y roguelites'), -- ID: 18
-('Rol por turnos'), -- ID: 19
-('En grupo'), -- ID: 20
-('Simuladores de construcción y automatización'), -- ID: 21
-('Simuladores de aficiones y trabajos'), -- ID: 22
-('Simuladores de citas'), -- ID: 23
-('Simuladores de agricultura y fabricación'), -- ID: 24
-('Simuladores de espacio y vuelo'), -- ID: 25
-('Simuladores de vida e inmersivos'), -- ID: 26
-('Simuladores de sandbox y de física'), -- ID: 27
-('Estrategia en tiempo real'), -- ID: 28
-('Brutalismo'), -- ID: 29
-('Defensa de torres'), -- ID: 30
-('De cartas y tablero'), -- ID: 31
-('Juegos de ciudades y asentamientos'), -- ID: 32
-('Gran estrategia y 4X'), -- ID: 33
-('Estrategia militar'), -- ID: 34
-('Simulación'), -- ID: 35
-('Carreras'), -- ID: 36
-('Simulador de carreras'), -- ID: 37
-('Pesca y caza'), -- ID: 38
-('Deportes de equipo'), -- ID: 39
-('Deportes individuales'), -- ID: 40
-('Deportes'), -- ID: 41
-('Terror'), -- ID: 42
-('Ciencia ficción y ciberpunk'), -- ID: 43
-('Espacio'), -- ID: 44
-('Mundo abierto'), -- ID: 45
-('Anime'), -- ID: 46
-('Supervivencia'), -- ID: 47
-('Detectives y misterio'), -- ID: 48
-('Plataformas'), -- ID: 49
-('Shooter'), -- ID: 50
-('Party Game'); -- ID: 51
+('Disparos en primera persona'),
+('Disparos en tercera persona'),
+('Hack and slash'),
+('Arcade y ritmo'),
+('Juegos de plataforma y corredores'),
+('Matamarcianos'),
+('Lucha y artes marciales'),
+('Objetos ocultos'),
+('Casuales'),
+('Metroidvania'),
+('Puzles'),
+('Rol de aventuras'),
+('Novelas visuales'),
+('Buena trama'),
+('Rol y acción'),
+('Rol, táctica y estrategia'),
+('Rol japonés'),
+('Roguelikes y roguelites'),
+('Rol por turnos'),
+('En grupo'),
+('Simuladores de construcción y automatización'),
+('Simuladores de aficiones y trabajos'),
+('Simuladores de citas'),
+('Simuladores de agricultura y fabricación'),
+('Simuladores de espacio y vuelo'),
+('Simuladores de vida e inmersivos'),
+('Simuladores de sandbox y de física'),
+('Estrategia en tiempo real'),
+('Brutalismo'),
+('Defensa de torres'),
+('De cartas y tablero'),
+('Juegos de ciudades y asentamientos'),
+('Gran estrategia y 4X'),
+('Estrategia militar'),
+('Simulación'),
+('Carreras'),
+('Simulador de carreras'),
+('Pesca y caza'),
+('Deportes de equipo'),
+('Deportes individuales'),
+('Deportes'),
+('Terror'),
+('Ciencia ficción y ciberpunk'),
+('Espacio'),
+('Mundo abierto'),
+('Anime'),
+('Supervivencia'),
+('Detectives y misterio'),
+('Plataformas'),
+('Shooter'),
+('Party Game');
 
 INSERT INTO Fabricantes (Fabricante) VALUES
-('Magnavox'), -- ID: 1
-('Atari'), -- ID: 2
-('Mattel Electronics'), -- ID: 3
-('Coleco'), -- ID: 4
-('Nintendo'), -- ID: 5
-('Sega'), -- ID: 6
-('Sony'), -- ID: 7
-('Microsoft'), -- ID: 8
-('NEC'), -- ID: 9
-('SNK'), -- ID: 10
-('The 3DO Company'), -- ID: 11
-('Nokia'), -- ID: 12
-('Valve'), -- ID: 13
-('Asus'), -- ID: 14
-('Panic'); -- ID: 15
+('Magnavox'),
+('Atari'),
+('Mattel Electronics'),
+('Coleco'),
+('Nintendo'),
+('Sega'),
+('Sony'),
+('Microsoft'),
+('NEC'),
+('SNK'),
+('The 3DO Company'),
+('Nokia'),
+('Valve'),
+('Asus'),
+('Panic');
 
 INSERT INTO Consolas (Nombre, FabricanteID) VALUES
 -- Pioneras y Clásicas (Atari, Magnavox, etc.)
-('Magnavox Odyssey', 1), -- ID: 1
-('Atari 2600', 2), -- ID: 2
-('Intellivision', 3), -- ID: 3
-('ColecoVision', 4), -- ID: 4
-('Atari 5200', 2), -- ID: 5
-('Atari 7800', 2), -- ID: 6
-('Atari Lynx', 2), -- ID: 7
-('Atari Jaguar', 2), -- ID: 8
+('Magnavox Odyssey', 1),
+('Atari 2600', 2),
+('Intellivision', 3),
+('ColecoVision', 4),
+('Atari 5200', 2),
+('Atari 7800', 2),
+('Atari Lynx', 2),
+('Atari Jaguar', 2),
 
 -- Nintendo (Sobremesa)
-('Nintendo Entertainment System (NES)', 5), -- ID: 9
-('Super Nintendo Entertainment System (SNES)', 5), -- ID: 10
-('Nintendo 64', 5), -- ID: 11
-('Nintendo GameCube', 5), -- ID: 12
-('Wii', 5), -- ID: 13
-('Wii U', 5), -- ID: 14
-('Nintendo Switch', 5), -- ID: 15
+('Nintendo Entertainment System (NES)', 5),
+('Super Nintendo Entertainment System (SNES)', 5),
+('Nintendo 64', 5),
+('Nintendo GameCube', 5),
+('Wii', 5),
+('Wii U', 5),
+('Nintendo Switch', 5),
 
 -- Nintendo (Portátiles)
-('Game & Watch', 5), -- ID: 16
-('Game Boy', 5), -- ID: 17
-('Game Boy Color', 5), -- ID: 18
-('Virtual Boy', 5), -- ID: 19
-('Game Boy Advance', 5), -- ID: 20
-('Game Boy Advance SP', 5), -- ID: 21
-('Nintendo DS', 5), -- ID: 22
-('Nintendo DS Lite', 5), -- ID: 23
-('Nintendo DSi', 5), -- ID: 24
-('Nintendo 3DS', 5), -- ID: 25
-('Nintendo 2DS', 5), -- ID: 26
-('New Nintendo 3DS', 5), -- ID: 27
-('Nintendo Switch Lite', 5), -- ID: 28
+('Game & Watch', 5),
+('Game Boy', 5),
+('Game Boy Color', 5),
+('Virtual Boy', 5),
+('Game Boy Advance', 5),
+('Game Boy Advance SP', 5),
+('Nintendo DS', 5),
+('Nintendo DS Lite', 5),
+('Nintendo DSi', 5),
+('Nintendo 3DS', 5),
+('Nintendo 2DS', 5),
+('New Nintendo 3DS', 5),
+('Nintendo Switch Lite', 5),
 
 -- SEGA
-('SG-1000', 6), -- ID: 29
-('Sega Master System', 6), -- ID: 30
-('Sega Genesis (Mega Drive)', 6), -- ID: 31
-('Sega Game Gear', 6), -- ID: 32
-('Sega CD', 6), -- ID: 33
-('Sega 32X', 6), -- ID: 34
-('Sega Saturn', 6), -- ID: 35
-('Sega Dreamcast', 6), -- ID: 36
+('SG-1000', 6),
+('Sega Master System', 6),
+('Sega Genesis (Mega Drive)', 6),
+('Sega Game Gear', 6),
+('Sega CD', 6),
+('Sega 32X', 6),
+('Sega Saturn', 6),
+('Sega Dreamcast', 6),
 
 -- Sony (PlayStation)
-('PlayStation (PS1)', 7), -- ID: 37
-('PlayStation 2 (PS2)', 7), -- ID: 38
-('PlayStation 3 (PS3)', 7), -- ID: 39
-('PlayStation 4 (PS4)', 7), -- ID: 40
-('PlayStation 5 (PS5)', 7), -- ID: 41
+('PlayStation (PS1)', 7),
+('PlayStation 2 (PS2)', 7),
+('PlayStation 3 (PS3)', 7),
+('PlayStation 4 (PS4)', 7),
+('PlayStation 5 (PS5)', 7),
 
 -- Sony (Portátiles)
-('PlayStation Portable (PSP)', 7), -- ID: 42
-('PlayStation Vita', 7), -- ID: 43
+('PlayStation Portable (PSP)', 7),
+('PlayStation Vita', 7),
 
 -- Microsoft (Xbox)
-('Xbox', 8), -- ID: 44
-('Xbox 360', 8), -- ID: 45
-('Xbox One', 8), -- ID: 46
-('Xbox Series S', 8), -- ID: 47
-('Xbox Series X', 8), -- ID: 48
+('Xbox', 8),
+('Xbox 360', 8),
+('Xbox One', 8),
+('Xbox Series S', 8),
+('Xbox Series X', 8),
 
 -- Otras (NEC, SNK, 3DO, etc.)
-('TurboGrafx-16 (PC Engine)', 9), -- ID: 49
-('Neo Geo AES', 10), -- ID: 50
-('Neo Geo CD', 10), -- ID: 51
-('Neo Geo Pocket', 10), -- ID: 52
-('Neo Geo Pocket Color', 10), -- ID: 53
-('3DO Interactive Multiplayer', 11), -- ID: 54
-('N-Gage', 12), -- ID: 55
+('TurboGrafx-16 (PC Engine)', 9),
+('Neo Geo AES', 10),
+('Neo Geo CD', 10),
+('Neo Geo Pocket', 10),
+('Neo Geo Pocket Color', 10),
+('3DO Interactive Multiplayer', 11),
+('N-Gage', 12),
 
 -- Modernas (PC Handhelds)
-('Steam Deck', 13), -- ID: 56
-('Asus ROG Ally', 14), -- ID: 57
-('Playdate', 15); -- ID: 58
+('Steam Deck', 13),
+('Asus ROG Ally', 14),
+('Playdate', 15);
 
 INSERT INTO Proveedores (NombreProveedor) VALUES
 -- Gigantes y Propietarios de Plataformas
@@ -408,3 +408,49 @@ INSERT INTO Clientes (Nombre, Apellido, Email, Telefono, FechaRegistro) VALUES
 ('Samuel', 'Vasquez', 'Samuel.vasquez@mail.udp.cl', 900000002, '2024-03-22'),
 ('Alex', 'Bravo', 'alex.bravo@mail.udp.cl', 900000003, '2024-06-2'),
 ('Diego', 'Escobar', 'diego.escobar@mail.udp.cl', 900000004, '2024-08-10');
+
+INSERT INTO Ventas (ClienteID, FechaVenta, TotalVenta, MetodoPago) VALUES
+(1, '2025-01-10 10:30:00', 49990, 'Tarjeta de Crédito');
+INSERT INTO DetalleVenta (VentaID, ProductoID, Cantidad, PrecioUnitarioVenta) VALUES
+(CURRVAL('ventas_ventaid_seq'), 19, 1, 49990);
+
+INSERT INTO Ventas (ClienteID, FechaVenta, TotalVenta, MetodoPago) VALUES
+(2, '2025-02-15 14:15:00', 99990, 'Tarjeta de Débito');
+
+INSERT INTO DetalleVenta (VentaID, ProductoID, Cantidad, PrecioUnitarioVenta) VALUES
+(CURRVAL('ventas_ventaid_seq'), 10, 1, 54990),
+(CURRVAL('ventas_ventaid_seq'), 11, 1, 45000);
+
+INSERT INTO Ventas (ClienteID, FechaVenta, TotalVenta, MetodoPago) VALUES
+(3, '2025-03-05 18:00:00', 30000, 'Transferencia');
+INSERT INTO DetalleVenta (VentaID, ProductoID, Cantidad, PrecioUnitarioVenta) VALUES
+(CURRVAL('ventas_ventaid_seq'), 3, 1, 30000);
+
+INSERT INTO Ventas (ClienteID, FechaVenta, TotalVenta, MetodoPago) VALUES
+(1, '2025-03-20 09:05:00', 35000, 'Tarjeta de Crédito');
+INSERT INTO DetalleVenta (VentaID, ProductoID, Cantidad, PrecioUnitarioVenta) VALUES
+(CURRVAL('ventas_ventaid_seq'), 4, 1, 35000);
+
+INSERT INTO Ventas (ClienteID, FechaVenta, TotalVenta, MetodoPago) VALUES
+(4, '2025-04-20 11:00:00', 99980, 'Efectivo');
+INSERT INTO DetalleVenta (VentaID, ProductoID, Cantidad, PrecioUnitarioVenta) VALUES
+(CURRVAL('ventas_ventaid_seq'), 12, 2, 49990);
+
+INSERT INTO Ventas (ClienteID, FechaVenta, TotalVenta, MetodoPago) VALUES
+(3, '2025-10-15 12:30:00', 45000, 'Tarjeta de Crédito');
+
+INSERT INTO DetalleVenta (VentaID, ProductoID, Cantidad, PrecioUnitarioVenta) VALUES
+(CURRVAL('ventas_ventaid_seq'), 11, 1, 45000);
+
+INSERT INTO Ventas (ClienteID, FechaVenta, TotalVenta, MetodoPago) VALUES
+(4, '2025-11-05 16:30:00', 65000, 'Transferencia');
+
+INSERT INTO DetalleVenta (VentaID, ProductoID, Cantidad, PrecioUnitarioVenta) VALUES
+(CURRVAL('ventas_ventaid_seq'), 3, 1, 30000),
+(CURRVAL('ventas_ventaid_seq'), 4, 1, 35000);
+
+INSERT INTO Ventas (ClienteID, FechaVenta, TotalVenta, MetodoPago) VALUES
+(2, '2025-11-09 11:00:00', 54990, 'PayPal');
+
+INSERT INTO DetalleVenta (VentaID, ProductoID, Cantidad, PrecioUnitarioVenta) VALUES
+(CURRVAL('ventas_ventaid_seq'), 20, 1, 54990);
