@@ -4,10 +4,10 @@ import psycopg2
 import time
 import os
 
-DB_HOST = os.environ.get('DB_HOST', 'db')
-DB_NAME = os.environ.get('DB_NAME', 'soabusdb')
-DB_USER = os.environ.get('DB_USER', 'admin')
-DB_PASS = os.environ.get('DB_PASS', 'admin')
+DB_HOST = os.environ.get('DB_HOST')
+DB_NAME = os.environ.get('DB_NAME')
+DB_USER = os.environ.get('DB_USER')
+DB_PASS = os.environ.get('DB_PASS')
 
 def connect_to_db():
     """
@@ -133,8 +133,13 @@ try:
         else:
             service_prefix = "serdb" 
             if data_str.startswith(service_prefix):
-                query_str = data_str[len(service_prefix):].strip() 
-                
+                query_str = data_str[len(service_prefix):].strip()
+
+                if "drop" in query_str.lower() or "delete" in query_str.lower():
+                    print("Comando no permitido.")
+                    send_response(sock, "Error: Comando no permitido")
+                    continue
+
                 if not query_str:
                     print("Comando recibido pero sin consulta.")
                     send_response(sock, "Error: Consulta vacía")
