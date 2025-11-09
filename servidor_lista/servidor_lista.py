@@ -117,7 +117,11 @@ try:
                     send_response(sock, db_result)
 
                 elif command == 'LISTA_CLIENTES':
-                    sql_query = "SELECT nombre FROM clientes;"
+                    sql_query = """
+                        SELECT 
+                            *
+                            FROM Clientes;
+                    """
                     db_result = call_db_service(sql_query)
                     send_response(sock, db_result)
                     
