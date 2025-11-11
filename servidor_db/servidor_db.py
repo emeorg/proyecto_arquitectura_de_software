@@ -22,7 +22,8 @@ def connect_to_db():
                 host=DB_HOST,
                 dbname=DB_NAME,
                 user=DB_USER,
-                password=DB_PASS
+                password=DB_PASS,
+                client_encoding='latin1'
             )
             print("Conectado a la base de datos PostgreSQL")
             return conn
@@ -84,8 +85,8 @@ def send_response(sock, payload_str):
     """
     response_payload = "serdbOK_" + payload_str
     
-    response_bytes = response_payload.encode('utf-8')
-    length_str = str(len(response_bytes)).zfill(5).encode('utf-8')
+    response_bytes = response_payload.encode('latin-1')
+    length_str = str(len(response_bytes)).zfill(5).encode('latin-1')
     message = length_str + response_bytes
     
     print(f"Enviando respuesta: {response_payload}")
@@ -111,7 +112,7 @@ try:
         if not amount_expected_bytes:
             break
 
-        amount_expected = int(amount_expected_bytes.decode('utf-8'))
+        amount_expected = int(amount_expected_bytes.decode('latin-1'))
         
         data = b''
         while amount_received < amount_expected:
@@ -125,7 +126,7 @@ try:
         if not data:
             break
         
-        data_str = data.decode('utf-8')
+        data_str = data.decode('latin-1')
 
         if (sinit == 1):
             sinit = 0

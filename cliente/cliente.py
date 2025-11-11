@@ -78,9 +78,9 @@ def show_menu_ventas():
 def prepare_message(service_name, payload_str):
     """Prepara el mensaje para enviar al bus."""
     full_payload = service_name + payload_str
-    full_payload_bytes = full_payload.encode('utf-8')
+    full_payload_bytes = full_payload.encode('latin-1')
     length_str = str(len(full_payload_bytes)).zfill(5)
-    message_to_send = length_str.encode('utf-8') + full_payload_bytes
+    message_to_send = length_str.encode('latin-1') + full_payload_bytes
     return message_to_send
 
 def call_service(sock, service_name, payload_str):
@@ -98,7 +98,7 @@ def call_service(sock, service_name, payload_str):
             if not amount_expected_bytes:
                 return
                 
-            amount_expected = int(amount_expected_bytes.decode('utf-8'))
+            amount_expected = int(amount_expected_bytes.decode('latin-1'))
 
             data = b''
             while amount_received < amount_expected:
@@ -110,7 +110,7 @@ def call_service(sock, service_name, payload_str):
 
         console.print("[bold green][OK][/bold green] Respuesta recibida\n")
         
-        full_response_str = data.decode('utf-8')
+        full_response_str = data.decode('latin-1')
 
         try:
             left, sep, right = full_response_str.rpartition('_')

@@ -12,8 +12,8 @@ def send_response(sock, payload_str):
     """
     response_payload = f"{MY_SERVICE_NAME}OK_{payload_str}"
     
-    response_bytes = response_payload.encode('utf-8')
-    length_str = str(len(response_bytes)).zfill(5).encode('utf-8')
+    response_bytes = response_payload.encode('latin-1')
+    length_str = str(len(response_bytes)).zfill(5).encode('latin-1')
     message = length_str + response_bytes
     
     print(f"Enviando respuesta: {response_payload}")
@@ -29,8 +29,8 @@ def call_db_service(sql_query):
     db_sock = None
     try:
         payload = DB_SERVICE_NAME + sql_query
-        payload_bytes = payload.encode('utf-8')
-        length_str = str(len(payload_bytes)).zfill(5).encode('utf-8')
+        payload_bytes = payload.encode('latin-1')
+        length_str = str(len(payload_bytes)).zfill(5).encode('latin-1')
         message = length_str + payload_bytes
 
         db_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -42,7 +42,7 @@ def call_db_service(sql_query):
         if not amount_expected_bytes:
             return "Error: No hubo respuesta del servicio de DB"
 
-        amount_expected = int(amount_expected_bytes.decode('utf-8'))
+        amount_expected = int(amount_expected_bytes.decode('latin-1'))
 
         data = b''
         while amount_received < amount_expected:
@@ -52,7 +52,7 @@ def call_db_service(sql_query):
             data += chunk
             amount_received += len(chunk)
 
-        full_response_str = data.decode('utf-8')
+        full_response_str = data.decode('latin-1')
 
         data_part = full_response_str.split("_", 1)[-1]
 
@@ -71,7 +71,7 @@ try:
     print(f"Conectando al bus en {BUS_ADDRESS}...")
     sock.connect(BUS_ADDRESS)
 
-    message = b'00010sinit' + MY_SERVICE_NAME.encode('utf-8')
+    message = b'00010sinit' + MY_SERVICE_NAME.encode('latin-1')
     sock.sendall(message)
     sinit = 1
     print(f"Servicio '{MY_SERVICE_NAME}' registrado, esperando confirmación...")
@@ -83,7 +83,7 @@ try:
         amount_expected_bytes = sock.recv(5)
         if not amount_expected_bytes:
             break
-        amount_expected = int(amount_expected_bytes.decode('utf-8'))
+        amount_expected = int(amount_expected_bytes.decode('latin-1'))
         
         data = b''
         while amount_received < amount_expected:
@@ -94,7 +94,7 @@ try:
             data += chunk
             amount_received += len(chunk)
 
-        data_str = data.decode('utf-8')
+        data_str = data.decode('latin-1')
 
         if (sinit == 1):
             sinit = 0

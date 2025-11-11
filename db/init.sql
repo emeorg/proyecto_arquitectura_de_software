@@ -54,7 +54,7 @@ CREATE TABLE Productos (
 
     FOREIGN KEY (JuegoID) REFERENCES Juegos(JuegoID),
     FOREIGN KEY (ConsolaID) REFERENCES Consolas(ConsolaID),
-    
+
     CHECK (Formato IN ('Fisico', 'Digital')),
     CHECK (Condicion IN ('Nuevo', 'Usado')),
     CHECK (NOT (Formato = 'Digital' AND Condicion = 'Usado'))
@@ -66,7 +66,7 @@ CREATE TABLE Ventas (
     FechaVenta TIMESTAMP DEFAULT (NOW()),
     TotalVenta NUMERIC(12) NOT NULL,
     MetodoPago VARCHAR(50),
-    
+
     FOREIGN KEY (ClienteID) REFERENCES Clientes(ClienteID)
 );
 
@@ -76,7 +76,7 @@ CREATE TABLE DetalleVenta (
     ProductoID INT NOT NULL,
     Cantidad INT NOT NULL DEFAULT 1,
     PrecioUnitarioVenta NUMERIC(10) NOT NULL,
-    
+
     FOREIGN KEY (VentaID) REFERENCES Ventas(VentaID),
     FOREIGN KEY (ProductoID) REFERENCES Productos(ProductoID),
     CHECK (Cantidad > 0)
